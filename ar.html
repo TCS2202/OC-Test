@@ -12,43 +12,46 @@
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
 
     <style>
-      body, html {
+      html, body {
         margin: 0;
         padding: 0;
         overflow: hidden;
+        height: 100%;
       }
 
       #controls {
         position: fixed;
-        top: 20px;
-        right: 20px;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
         z-index: 10;
         display: flex;
-        flex-direction: column;
-        gap: 10px;
+        gap: 20px;
       }
 
       #controls button {
-        padding: 12px;
-        font-size: 20px;
-        background-color: rgba(0, 123, 255, 0.8);
+        padding: 15px 25px;
+        font-size: 24px;
+        background-color: rgba(0, 123, 255, 0.9);
         color: white;
         border: none;
-        border-radius: 8px;
+        border-radius: 10px;
         cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
       }
 
-      #controls button:hover {
+      #controls button:active {
+        transform: scale(0.95);
         background-color: rgba(0, 123, 255, 1);
       }
     </style>
   </head>
 
   <body>
-    <!-- Steuerungsbuttons -->
+    <!-- Steuerungsbuttons unten -->
     <div id="controls">
-      <button onclick="changeScale(1.1)">+</button>
       <button onclick="changeScale(0.9)">-</button>
+      <button onclick="changeScale(1.1)">+</button>
     </div>
 
     <!-- AR Szene -->
