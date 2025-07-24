@@ -1,107 +1,101 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <title>MindAR Test</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <head>
+    <meta charset="UTF-8" />
+    <title>AR mit MindAR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- A-Frame + MindAR -->
-  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/aframe/mindar-aframe.prod.js"></script>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/aframe/mindar-aframe.prod.js"></script>
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      height: 100%;
-      background: black;
-    }
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: black;
+      }
 
-    #controls {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      display: flex;
-      gap: 15px;
-    }
+      a-scene {
+        width: 100vw;
+        height: 100vh;
+      }
 
-    #controls button {
-      padding: 15px 25px;
-      font-size: 18px;
-      background: rgba(0, 123, 255, 0.9);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+      #controls {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 15px;
+        z-index: 10;
+      }
 
-    a-scene {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-    }
-  </style>
-</head>
-<body>
-  <!-- Steuerung -->
-  <div id="controls">
-    <button onclick="changeScale(0.9)">-</button>
-    <button onclick="changeScale(1.1)">+</button>
-  </div>
+      #controls button {
+        padding: 15px 20px;
+        font-size: 18px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
 
-  <!-- AR Szene -->
-  <a-scene
-    mindar-image="imageTargetSrc: targets/target.mind; autoStart: true; uiLoading: yes; uiScan: yes;"
-    color-space="sRGB"
-    embedded
-    renderer="colorManagement: true; logarithmicDepthBuffer: true;"
-    vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: true"
-  >
-    <a-assets>
-      <a-asset-item id="modelGLB" src="models/s8_orthorhombisch.glb"></a-asset-item>
-    </a-assets>
+      #controls button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="controls">
+      <button onclick="changeScale(0.9)">-</button>
+      <button onclick="changeScale(1.1)">+</button>
+    </div>
 
-    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    <a-scene
+      mindar-image="imageTargetSrc: targets/target.mind; autoStart: true;"
+      embedded
+      device-orientation-permission-ui="enabled: true"
+      vr-mode-ui="enabled: false"
+      renderer="colorManagement: true; logarithmicDepthBuffer: true;"
+    >
+      <a-assets>
+        <a-asset-item id="modelGLB" src="models/s8_orthorhombisch.glb"></a-asset-item>
+      </a-assets>
 
-    <!-- Marker-Ziel -->
-    <a-entity mindar-image-target="targetIndex: 0">
-      <a-entity
-        id="model"
-        gltf-model="#modelGLB"
-        position="0 0 0"
-        scale="0.3 0.3 0.3"
-        visible="false"
-      ></a-entity>
-    </a-entity>
-  </a-scene>
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  <script>
-    const model = document.querySelector('#model');
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-entity
+          id="model"
+          gltf-model="#modelGLB"
+          position="0 0 0"
+          scale="0.2 0.2 0.2"
+          visible="false"
+        ></a-entity>
+      </a-entity>
+    </a-scene>
 
-    // Sichtbarkeit nur bei Marker-Erkennung
-    document.querySelector('a-scene').addEventListener("targetFound", () => {
-      model.setAttribute('visible', true);
-    });
+    <script>
+      const model = document.querySelector('#model');
 
-    document.querySelector('a-scene').addEventListener("targetLost", () => {
-      model.setAttribute('visible', false);
-    });
-
-    // Größe verändern
-    function changeScale(factor) {
-      const scale = model.getAttribute("scale");
-      model.setAttribute("scale", {
-        x: scale.x * factor,
-        y: scale.y * factor,
-        z: scale.z * factor
+      document.querySelector('a-scene').addEventListener('targetFound', () => {
+        model.setAttribute('visible', true);
       });
-    }
-  </script>
-</body>
+
+      document.querySelector('a-scene').addEventListener('targetLost', () => {
+        model.setAttribute('visible', false);
+      });
+
+      function changeScale(factor) {
+        const scale = model.getAttribute("scale");
+        model.setAttribute("scale", {
+          x: scale.x * factor,
+          y: scale.y * factor,
+          z: scale.z * factor
+        });
+      }
+    </script>
+  </body>
 </html>
