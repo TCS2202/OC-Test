@@ -2,22 +2,20 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>MindAR AR</title>
+  <title>MindAR Test</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 
-  <!-- A-Frame -->
+  <!-- A-Frame + MindAR -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-
-  <!-- MindAR -->
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/aframe/mindar-aframe.prod.js"></script>
 
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
       overflow: hidden;
-      background-color: black;
+      height: 100%;
+      background: black;
     }
 
     #controls {
@@ -32,13 +30,12 @@
 
     #controls button {
       padding: 15px 25px;
-      font-size: 20px;
-      background-color: rgba(0, 123, 255, 0.95);
+      font-size: 18px;
+      background: rgba(0, 123, 255, 0.9);
       color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
     }
 
     a-scene {
@@ -51,7 +48,7 @@
   </style>
 </head>
 <body>
-  <!-- Buttons -->
+  <!-- Steuerung -->
   <div id="controls">
     <button onclick="changeScale(0.9)">-</button>
     <button onclick="changeScale(1.1)">+</button>
@@ -59,7 +56,7 @@
 
   <!-- AR Szene -->
   <a-scene
-    mindar-image="imageTargetSrc: targets/target.mind; autoStart: true; uiLoading: yes; uiScan: yes; filterMinCF:0.0001"
+    mindar-image="imageTargetSrc: targets/target.mind; autoStart: true; uiLoading: yes; uiScan: yes;"
     color-space="sRGB"
     embedded
     renderer="colorManagement: true; logarithmicDepthBuffer: true;"
@@ -72,7 +69,7 @@
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    <!-- Target -->
+    <!-- Marker-Ziel -->
     <a-entity mindar-image-target="targetIndex: 0">
       <a-entity
         id="model"
@@ -87,7 +84,7 @@
   <script>
     const model = document.querySelector('#model');
 
-    // Sichtbarkeit basierend auf Marker-Erkennung steuern
+    // Sichtbarkeit nur bei Marker-Erkennung
     document.querySelector('a-scene').addEventListener("targetFound", () => {
       model.setAttribute('visible', true);
     });
@@ -96,6 +93,7 @@
       model.setAttribute('visible', false);
     });
 
+    // Größe verändern
     function changeScale(factor) {
       const scale = model.getAttribute("scale");
       model.setAttribute("scale", {
