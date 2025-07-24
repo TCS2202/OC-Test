@@ -4,15 +4,19 @@
     <meta charset="UTF-8" />
     <title>MindAR Kameratest</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/aframe/mindar-aframe.prod.js"></script>
+
     <style>
       html, body {
         margin: 0;
         padding: 0;
         height: 100%;
         overflow: hidden;
+        background: black;
       }
+
       a-scene {
         width: 100vw;
         height: 100vh;
@@ -21,17 +25,18 @@
   </head>
   <body>
     <a-scene
-      mindar-image="imageTargetSrc: targets/target.mind; autoStart: true"
+      mindar-image="imageTargetSrc: targets/target.mind; autoStart: true;"
       embedded
-      color-space="sRGB"
       device-orientation-permission-ui="enabled: true"
       vr-mode-ui="enabled: false"
       renderer="colorManagement: true; logarithmicDepthBuffer: true;"
     >
+      <a-assets></a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
+      <!-- Marker-Ziel mit einfachem grünen Würfel -->
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-plane color="green" height="0.3" width="0.3" position="0 0 0"></a-plane>
+        <a-box color="green" position="0 0 0" depth="0.1" height="0.1" width="0.1"></a-box>
       </a-entity>
     </a-scene>
   </body>
