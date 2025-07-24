@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>AR Ansicht</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
 
@@ -41,31 +41,25 @@
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
     }
 
+    /* Entferne object-fit styles – sie verursachen Verzerrung */
     video {
-      object-fit: cover !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      position: fixed !important;
-      top: 0;
-      left: 0;
-      z-index: -2;
+      width: auto !important;
+      height: auto !important;
     }
   </style>
 </head>
 
 <body>
-  <!-- Buttons -->
   <div id="controls">
     <button onclick="changeScale(0.9)">-</button>
     <button onclick="changeScale(1.1)">+</button>
   </div>
 
-  <!-- AR Szene -->
   <a-scene
     embedded
     vr-mode-ui="enabled: false"
     renderer="antialias: true; alpha: true;"
-    arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
+    arjs="sourceType: webcam; displayWidth: 640; displayHeight: 480; videoTexture: true; debugUIEnabled: false;"
   >
     <a-marker preset="hiro">
       <a-entity
