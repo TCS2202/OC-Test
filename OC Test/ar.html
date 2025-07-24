@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>AR Molekül</title>
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/2.2.1/aframe/build/aframe-ar.min.js"></script>
+  <style>
+    #toggleBtn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      padding: 10px 20px;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body style="margin: 0; overflow: hidden;">
+  <button id="toggleBtn">Orbitale einblenden</button>
+
+  <a-scene embedded arjs>
+    <a-assets id="assetRoot"></a-assets>
+
+    <a-marker preset="hiro">
+      <a-entity id="baseModel" position="0 0 0" scale="0.5 0.5 0.5"></a-entity>
+      <a-entity id="orbitalModel" position="0 0 0" scale="0.5 0.5 0.5" visible="false"></a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const molName = urlParams.get('mol');
+
+    const baseModel = document.getElementById('baseModel');
+    const orbitalModel = document.getElementById('orbitalModel');
+    const assetRoot = document.getElementById('assetRoot');
+
+    const baseAsset = document.createElement('a-asset-item');
+    baseAsset.setAttribute('id', 'base');
+    baseAsset.setAttribute('src', `models/${molName}_base.glb`);
+    assetRoot.appendChild(baseAsset);
+
+    const orbitalAsset = document.createElement('a-asset-item');
+    orbitalAsset.setAttribute('id', 'orbital');
+    orbitalAsset.setAttribute('src', `models/${molName}_orbital.glb`);
+    assetRoot.appendChild(orbitalAsset);
+
+    setTimeout(() => {
+      baseModel.setAttribute('gltf-model', '#base');
+      orbitalModel.setAttribute('gltf-model', '#orbital');
+    }, 500);
+
+    const toggleBtn = document.getElementById('toggleBtn');
+    let orbitalsVisible = false;
+
+    toggleBtn.addEventListener('click', () => {
+      orbitalsVisible = !orbitalsVisible;
+      orbitalModel.setAttribute('visible', orbitalsVisible);
+      toggleBtn.textContent = orbitalsVisible ? 'Orbitale ausblenden' : 'Orbitale einblenden';
+    });
+  </script>
+</body>
+</html>
