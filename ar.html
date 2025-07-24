@@ -18,7 +18,6 @@
         height: 100%;
         width: 100%;
         overflow: hidden;
-        touch-action: none;
         background-color: black;
       }
 
@@ -27,7 +26,7 @@
         bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 9999;
+        z-index: 5;
         display: flex;
         gap: 20px;
       }
@@ -40,44 +39,35 @@
         border: none;
         border-radius: 10px;
         cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
       }
 
       #controls button:active {
         transform: scale(0.95);
-        background-color: rgba(0, 123, 255, 1);
-      }
-
-      /* Verhindert A-Frame Überschreibung */
-      canvas, a-scene {
-        pointer-events: none !important;
-      }
-
-      #controls {
-        pointer-events: auto;
       }
     </style>
   </head>
 
   <body>
-    <!-- Zoom-Buttons -->
+    <!-- Zoom Buttons -->
     <div id="controls">
       <button onclick="changeScale(0.9)">-</button>
       <button onclick="changeScale(1.1)">+</button>
     </div>
 
-    <!-- AR Szene -->
+    <!-- AR Scene -->
     <a-scene
       vr-mode-ui="enabled: false"
       embedded
-      arjs="sourceType: webcam; debugUIEnabled: false;"
+      arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+      renderer="logarithmicDepthBuffer: true;"
     >
       <a-marker preset="hiro">
         <a-entity
           id="model"
           gltf-model="models/s8_orthorhombisch.glb"
-          position="0 0 0"
           scale="0.5 0.5 0.5"
+          position="0 0 0"
         ></a-entity>
       </a-marker>
 
@@ -86,7 +76,7 @@
 
     <script>
       function changeScale(factor) {
-        const model = document.querySelector("#model");
+        const model = document.getElementById("model");
         const scale = model.getAttribute("scale");
         model.setAttribute("scale", {
           x: scale.x * factor,
