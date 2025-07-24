@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>AR Ansicht</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
 
     <!-- A-Frame -->
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
@@ -16,58 +16,51 @@
         margin: 0;
         padding: 0;
         height: 100%;
-        width: 100%;
         overflow: hidden;
         background-color: black;
       }
 
       #controls {
-        position: absolute;
+        position: fixed;
         bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 5;
+        z-index: 10;
         display: flex;
-        gap: 20px;
+        gap: 15px;
       }
 
       #controls button {
         padding: 15px 25px;
-        font-size: 24px;
-        background-color: rgba(0, 123, 255, 0.9);
+        font-size: 20px;
+        background-color: rgba(0, 123, 255, 0.95);
         color: white;
         border: none;
-        border-radius: 10px;
+        border-radius: 8px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
         cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      }
-
-      #controls button:active {
-        transform: scale(0.95);
       }
     </style>
   </head>
 
   <body>
-    <!-- Zoom Buttons -->
     <div id="controls">
       <button onclick="changeScale(0.9)">-</button>
       <button onclick="changeScale(1.1)">+</button>
     </div>
 
-    <!-- AR Scene -->
     <a-scene
-      vr-mode-ui="enabled: false"
       embedded
-      arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-      renderer="logarithmicDepthBuffer: true;"
+      vr-mode-ui="enabled: false"
+      renderer="antialias: true; alpha: true;"
+      arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
     >
       <a-marker preset="hiro">
         <a-entity
           id="model"
           gltf-model="models/s8_orthorhombisch.glb"
-          scale="0.5 0.5 0.5"
           position="0 0 0"
+          scale="0.5 0.5 0.5"
         ></a-entity>
       </a-marker>
 
