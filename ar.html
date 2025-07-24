@@ -1,88 +1,90 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <title>AR Ansicht</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
+  <head>
+    <meta charset="UTF-8" />
+    <title>MindAR AR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 
-  <!-- A-Frame -->
-  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 
-  <!-- AR.js -->
-  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
+    <!-- MindAR + A-Frame Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/aframe/mindar-aframe.prod.js"></script>
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-      background-color: black;
-    }
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background-color: black;
+      }
 
-    #controls {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      display: flex;
-      gap: 15px;
-    }
+      #controls {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        display: flex;
+        gap: 15px;
+      }
 
-    #controls button {
-      padding: 15px 25px;
-      font-size: 20px;
-      background-color: rgba(0, 123, 255, 0.95);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-    }
+      #controls button {
+        padding: 15px 25px;
+        font-size: 20px;
+        background-color: rgba(0, 123, 255, 0.95);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
 
-    /* Entferne object-fit styles – sie verursachen Verzerrung */
-    video {
-      width: auto !important;
-      height: auto !important;
-    }
-  </style>
-</head>
+  <body>
+    <div id="controls">
+      <button onclick="changeScale(0.9)">-</button>
+      <button onclick="changeScale(1.1)">+</button>
+    </div>
 
-<body>
-  <div id="controls">
-    <button onclick="changeScale(0.9)">-</button>
-    <button onclick="changeScale(1.1)">+</button>
-  </div>
+    <a-scene
+      mindar-image="imageTargetSrc: targets/target.mind; autoStart: true; uiLoading: no; uiError: no; uiScan: no;"
+      embedded
+      color-space="sRGB"
+      renderer="colorManagement: true, logarithmicDepthBuffer: true"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: true"
+    >
+      <a-assets>
+        <a-asset-item id="modelGLB" src="models/s8_orthorhombisch.glb"></a-asset-item>
+      </a-assets>
 
-  <a-scene
-    embedded
-    vr-mode-ui="enabled: false"
-    renderer="antialias: true; alpha: true;"
-    arjs="sourceType: webcam; displayWidth: 640; displayHeight: 480; videoTexture: true; debugUIEnabled: false;"
-  >
-    <a-marker preset="hiro">
-      <a-entity
-        id="model"
-        gltf-model="models/s8_orthorhombisch.glb"
-        scale="0.3 0.3 0.3"
-        position="0 0 0"
-      ></a-entity>
-    </a-marker>
+      <!-- Kamera -->
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    <a-entity camera></a-entity>
-  </a-scene>
+      <!-- Ziel -->
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-entity
+          id="model"
+          gltf-model="#modelGLB"
+          scale="0.3 0.3 0.3"
+          position="0 0 0"
+        ></a-entity>
+      </a-entity>
+    </a-scene>
 
-  <script>
-    function changeScale(factor) {
-      const model = document.querySelector("#model");
-      const scale = model.getAttribute("scale");
-      model.setAttribute("scale", {
-        x: scale.x * factor,
-        y: scale.y * factor,
-        z: scale.z * factor
-      });
-    }
-  </script>
-</body>
+    <script>
+      function changeScale(factor) {
+        const model = document.querySelector("#model");
+        const scale = model.getAttribute("scale");
+        model.setAttribute("scale", {
+          x: scale.x * factor,
+          y: scale.y * factor,
+          z: scale.z * factor
+        });
+      }
+    </script>
+  </body>
 </html>
